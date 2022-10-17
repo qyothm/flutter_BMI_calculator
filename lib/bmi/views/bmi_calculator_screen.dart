@@ -9,7 +9,8 @@ class BmiCalculator extends StatefulWidget {
 
 class _BmiCalculatorState extends State<BmiCalculator> {
   int currentIndex = 0;
-  String? result;
+  String? result = "";
+  String? status = "";
   double? height;
   double? weight;
 
@@ -141,6 +142,18 @@ class _BmiCalculatorState extends State<BmiCalculator> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10.0),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "$status",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -151,14 +164,34 @@ class _BmiCalculatorState extends State<BmiCalculator> {
   void calculateBmi(double? height, double? weight) {
     double finalResult = weight! / (height! * height / 10000);
     String bmi = finalResult.toStringAsFixed(2);
+    String? bmiStatus;
+    if (currentIndex == 0) {
+      if (finalResult < 18.5) bmiStatus = "UNDERWEIGHT";
+      if (finalResult >= 18.5 && finalResult <= 24.9) bmiStatus = "NORMAL";
+      if (finalResult >= 25 && finalResult <= 29.9) bmiStatus = "OVERWEIGHT";
+      if (finalResult >= 30 && finalResult <= 34.9) bmiStatus = "OBESE";
+      if (finalResult >= 35) bmiStatus = "EXTREMELY OBESE";
+    }
+
+    if (currentIndex == 1) {
+      if (finalResult < 18.5) bmiStatus = "UNDERWEIGHT";
+      if (finalResult >= 18.5 && finalResult <= 24.9) bmiStatus = "NORMAL";
+      if (finalResult >= 25 && finalResult <= 29.9) bmiStatus = "OVERWEIGHT";
+      if (finalResult >= 30 && finalResult <= 34.9) bmiStatus = "OBESE";
+      if (finalResult >= 35) bmiStatus = "EXTREMELY OBESE";
+    }
+
     setState(() {
       result = bmi;
+      status = bmiStatus;
     });
   }
 
   void changeIndex(int index) {
     setState(() {
       currentIndex = index;
+      heightController.clear();
+      weightController.clear();
     });
   }
 
